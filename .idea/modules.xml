@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/cloud-generator-core/cloud-generator-core.iml" filepath="$PROJECT_DIR$/.idea/modules/cloud-generator-core/cloud-generator-core.iml" group="cloud-generator-core" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/cloud-generator-core/cloud-generator-core_main.iml" filepath="$PROJECT_DIR$/.idea/modules/cloud-generator-core/cloud-generator-core_main.iml" group="cloud-generator-core" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/cloud-generator-core/cloud-generator-core_test.iml" filepath="$PROJECT_DIR$/.idea/modules/cloud-generator-core/cloud-generator-core_test.iml" group="cloud-generator-core" />
+      <module fileurl="file://$PROJECT_DIR$/cloud-generators-java.iml" filepath="$PROJECT_DIR$/cloud-generators-java.iml" />
+    </modules>
+  </component>
+</project>
