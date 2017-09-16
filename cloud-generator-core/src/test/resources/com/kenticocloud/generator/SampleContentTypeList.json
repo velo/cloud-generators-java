@@ -76,6 +76,10 @@
           "type": "text",
           "name": "Manufacturer"
         },
+        "in_stock": {
+          "type": "multiple_choice",
+          "name": "In Stock"
+        },
         "short_description": {
           "type": "rich_text",
           "name": "Short description"
