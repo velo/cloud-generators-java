@@ -36,6 +36,7 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -45,7 +46,7 @@ public class CodeGeneratorTest extends LocalServerTestBase {
     public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
     @Test
-    public void test() throws Exception {
+    public void testGenerator() throws Exception {
         String projectId = "02a70003-e864-464e-b62c-e0ede97deb8c";
 
         this.serverBootstrap.registerHandler(
@@ -84,5 +85,33 @@ public class CodeGeneratorTest extends LocalServerTestBase {
         Assert.assertEquals(2, files.size());
         Assert.assertTrue(files.contains("Article.java"));
         Assert.assertTrue(files.contains("Brewer.java"));
+    }
+
+    @Test
+    public void testExceptionWhenFolderCannotBeCreated() throws IOException {
+        File fileNotFolder = temporaryFolder.newFile("file");
+        File output = new File(fileNotFolder, "output");
+        try {
+            CodeGenerator codeGenerator = new CodeGenerator(null, null, output);
+            Assert.fail("Expected exception!");
+        } catch (UnsupportedOperationException ex) {
+            Assert.assertEquals(
+                    String.format("Unable to create directory %s", output.getAbsolutePath()),
+                    ex.getMessage());
+        }
+    }
+
+    @Test
+    public void testExceptionWhenOutputDirectoryIsFile() throws IOException {
+        File fileNotFolder = temporaryFolder.newFile("file");
+        try {
+            CodeGenerator codeGenerator = new CodeGenerator(null, null, fileNotFolder);
+            Assert.fail("Expected exception!");
+        } catch (UnsupportedOperationException ex) {
+            Assert.assertEquals(
+                    String.format("%s exists and is not a directory", fileNotFolder.getAbsolutePath()),
+                    ex.getMessage());
+        }
+
     }
 }

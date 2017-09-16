@@ -38,6 +38,9 @@ import java.util.Map;
 
 public class CodeGenerator {
 
+    private static final String DELIVERY_PACKAGE = "com.kenticocloud.delivery";
+    private static final String JAVA_UTIL_PACKAGE = "java.util";
+
     String projectId;
     String classpath;
     File outputDir;
@@ -46,11 +49,9 @@ public class CodeGenerator {
         this.projectId = projectId;
         this.classpath = classpath;
         this.outputDir = outputDir;
-        if (!outputDir.exists()) {
-            if (!outputDir.mkdirs()){
-                throw new UnsupportedOperationException(
-                        String.format("Unable to create directory %s", outputDir.getAbsolutePath()));
-            }
+        if (!outputDir.exists() && !outputDir.mkdirs()){
+            throw new UnsupportedOperationException(
+                    String.format("Unable to create directory %s", outputDir.getAbsolutePath()));
         }
         if (!outputDir.isDirectory()) {
             throw new UnsupportedOperationException(
@@ -93,16 +94,16 @@ public class CodeGenerator {
                     break;
                 case "multiple_choice" :
                     typeName = ParameterizedTypeName.get(
-                            ClassName.get("java.util", "List"),
-                            ClassName.get("com.kenticocloud.delivery", "Option"));
+                            ClassName.get(JAVA_UTIL_PACKAGE, "List"),
+                            ClassName.get(DELIVERY_PACKAGE, "Option"));
                     break;
                 case "date_time" :
                     typeName = ClassName.get(ZonedDateTime.class);
                     break;
                 case "asset" :
                     typeName = ParameterizedTypeName.get(
-                            ClassName.get("java.util", "List"),
-                            ClassName.get("com.kenticocloud.delivery", "Asset"));
+                            ClassName.get(JAVA_UTIL_PACKAGE, "List"),
+                            ClassName.get(DELIVERY_PACKAGE, "Asset"));
                     break;
                 case "modular_content" :
                     //It would be nice to inject a generated model here, but the information is not in the API
@@ -111,8 +112,8 @@ public class CodeGenerator {
                     break;
                 case "taxonomy" :
                     typeName = ParameterizedTypeName.get(
-                            ClassName.get("java.util", "List"),
-                            ClassName.get("com.kenticocloud.delivery", "Taxonomy"));
+                            ClassName.get(JAVA_UTIL_PACKAGE, "List"),
+                            ClassName.get(DELIVERY_PACKAGE, "Taxonomy"));
                     break;
                 default :
                     break;
