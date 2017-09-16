@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/Kentico/cloud-generators-java.svg?branch=master)](https://travis-ci.org/Kentico/cloud-generators-java)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![SonarQube](http://img.shields.io/badge/SonarQube-Results-blue.svg)](https://sonarcloud.io/dashboard?id=com.kenticocloud%3Acloud-generators-java)
+[![SonarQube](http://img.shields.io/badge/SonarQube-Results-blue.svg)](https://sonarcloud.io/organizations/kentico-github/projects)
 
 🚧 **This is currently a work in progress, and is only a prototype. Not ready for general consumption. Let us know if you want to contribute at DEVELOPERSCOMMUNITY@KENTICO.COM** 🚧 
 
