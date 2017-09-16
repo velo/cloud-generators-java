@@ -1,3 +1,4 @@
 rootProject.name = 'cloud-generators-java'
 
 include "cloud-generator-core"
+include "cloud-generators-gradle"
