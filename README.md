@@ -8,6 +8,64 @@
 
 This utility generates strongly-typed models based on Content Types in a Kentico Cloud project. The models are supposed to be used together with the [Kentico Cloud Delivery SDK for Java](https://github.com/Kentico/delivery-sdk-java). Please read the [documentation](https://github.com/Kentico/delivery-sdk-java/wiki/Working-with-Strongly-Typed-Models-(aka-Code-First-Approach)#customizing-the-strong-type-binding-logic) to see all benefits of this approach.
 
+## How to use
+
+### Gradle
+
+Apply the gradle plugin to your build file.
+
+```groovy
+buildscript {
+	repositories {
+		mavenCentral()
+		maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+	}
+	dependencies {
+		classpath("com.kenticocloud:cloud-generators-gradle:1.0-SNAPSHOT")
+	}
+}
+
+apply plugin: 'com.kenticocloud.generator'
+
+kenticoModel {
+	projectId = '975bf280-fd91-488c-994c-2f04416e5ee3'
+	packageName = 'com.dancinggoat.models'
+	outputDir = file('generated-sources')
+}
+```
+
+To generate sources, run the 'generateModels' task.
+
+```
+./gradlew generateModels
+```
+
+If you have the 'java' plugin applied to your project, the plugin will automatically register your outputDir as a srcDir
+with it.
+
+The plugin does *not* however automatically attach itself to the build task graph, so if you desire to add it, that has
+to be done manually.  Note however, it may not be desirable to do so, as the plugin makes a call to the Kentico API 
+which may increase build time.  It is recommended you check your generated sources in.
+
+If you are an IntelliJ user, you can hint to IntelliJ that a warning should be provided when editing the generated 
+sources by adding the following:
+
+```groovy
+apply plugin: 'idea'
+
+idea {
+	module {
+		// Marks the already(!) added srcDir as "generated"
+		generatedSourceDirs += file('generated-sources')
+	}
+}
+```
+
+### Parameters
+- `projectId` - required - a GUID that can be found in [Kentico Cloud](https://app.kenticocloud.com) -> API keys -> Project ID
+- `packageName` - required - a name of the Java package to put your generated sources into
+- `outputDir` - required - a File object instance referencing an output folder path
+
 ## Example output
 
 ```java
@@ -133,3 +191,25 @@ public class Article {
 
 ## Feedback & Contributing
 Check out the [contributing](https://github.com/Kentico/cloud-generators-java/blob/master/CONTRIBUTING.md) page to see the best places to file issues, start discussions and begin contributing.
+
+## Further information
+
+For more developer resources, visit the Kentico Cloud Developer Hub at <https://developer.kenticocloud.com>.
+
+### Building the sources
+
+Prerequisites:
+
+**Required:**
+Java 8 SDK (Oracle & OpenJDK both tested and supported)
+
+Ensure your `JAVA_HOME` environment is set.  Then build the project via the provided Gradle wrapper.
+```
+./gradlew clean build
+```
+
+Optional:
+[JetBrains IntelliJ Idea](https://www.jetbrains.com/idea/) project files are included.  Open up the project and Import the Gradle project to sync up dependencies.
+ * Note: The Gradle Test Kit in the cloud-generators-gradle module requires some extra steps to ensure it can access the 
+ classpath of the plugin, which are handled in the gradle build.  When running the unit test from inside IntelliJ, you 
+ may need to run the gradle build prior to ensure the latest build output is used if you are changing the main sources.
