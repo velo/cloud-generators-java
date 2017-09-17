@@ -40,12 +40,20 @@ class GenerateModelsFuncTest extends Specification {
     @Rule
     public TemporaryFolder temporaryFolder = new TemporaryFolder()
     File buildFile
-    File propertiesFile
+    File javaSrcFile
+    File javaTestFile
     def localServer = new LocalServer()
 
     def setup() {
         buildFile = temporaryFolder.newFile('build.gradle')
-        propertiesFile = temporaryFolder.newFile('gradle.properties')
+        javaSrcFile =
+                new File(temporaryFolder.newFolder("src", "main", "java", "com", "dancinggoat"),
+                        "Main.java")
+        javaTestFile =
+                new File(temporaryFolder.newFolder("src", "test", "java", "com", "dancinggoat"),
+                        "MainTest.java")
+        javaSrcFile.createNewFile()
+        javaTestFile.createNewFile()
         localServer.setUp()
     }
 
@@ -53,7 +61,7 @@ class GenerateModelsFuncTest extends Specification {
         localServer.shutDown()
     }
 
-    def "test that when the plugin is applied to a project and the generateModels task is executed, the sources are generated successfully"() {
+    def "test that when the plugin is applied to a project and the generateModels task is executed, the sources are generated successfully, and can be compiled with other sources"() {
         setup:
         String projectId = "02a70003-e864-464e-b62c-e0ede97deb8c"
 
@@ -73,6 +81,13 @@ class GenerateModelsFuncTest extends Specification {
             plugins {
                 id 'com.kenticocloud.generator'
             }
+            
+            apply plugin: 'java'
+            
+            repositories {
+                mavenCentral()
+            }
+
         '''
 
         buildFile << "\n"
@@ -90,12 +105,43 @@ class GenerateModelsFuncTest extends Specification {
                 outputDir = file('generated-sources')
                 deliveryClient = client
             }
+            
+            dependencies {
+                compile group: 'com.kenticocloud', name: 'delivery-sdk-java', version: '1.0'
+                testCompile group: 'junit', name: 'junit', version: '4.12'
+            }
         '''
 
+        javaSrcFile << '''
+        package com.dancinggoat;
+        
+        import com.dancinggoat.models.Article;
+        import com.dancinggoat.models.Brewer;
+        
+        public class Main {
+            public static Article getNewArticle() { return new Article(); }
+            public static Brewer getNewBrewer() { return new Brewer(); }
+        }
+        '''
+
+        javaTestFile << '''
+        package com.dancinggoat;
+        
+        import org.junit.Assert;
+        import org.junit.Test;
+        
+        public class MainTest {
+            @Test
+            public void test() {
+                Assert.assertNotNull(Main.getNewArticle());
+                Assert.assertNotNull(Main.getNewBrewer());
+            }
+        }
+        '''
         when:
         GradleRunner runner = GradleRunner.create()
                 .withProjectDir(temporaryFolder.getRoot())
-                .withArguments('generateModels', '--stacktrace', '--refresh-dependencies')
+                .withArguments('generateModels', 'build', '--stacktrace', '--refresh-dependencies')
                 .withPluginClasspath()
         BuildResult result =  runner.build()
         then:
