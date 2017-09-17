@@ -33,6 +33,7 @@ version '1.0-SNAPSHOT'
 ext.isContinuousIntegrationBuild = System.getenv('CONTINUOUS_INTEGRATION') != null
 
 apply plugin: 'java'
+apply plugin: 'groovy'
 apply plugin: 'jacoco'
 apply plugin: 'maven'
 apply plugin: 'signing'
@@ -43,12 +44,37 @@ repositories {
     mavenCentral()
 }
 
+configurations {
+    all*.exclude group: 'org.codehaus.groovy', module: 'groovy-all'
+}
+
+// Write the plugin's classpath to a file to share with the tests
+task createClasspathManifest {
+    def outputDir = file("$buildDir/$name")
+
+    inputs.files sourceSets.main.runtimeClasspath
+    outputs.dir outputDir
+
+    doLast {
+        outputDir.mkdirs()
+        file("$outputDir/plugin-classpath.txt").text = sourceSets.main.runtimeClasspath.join("\n")
+    }
+}
+
 dependencies {
     compile project(':cloud-generator-core')
+    compile gradleApi()
 
+    testCompile gradleTestKit()
+    testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.3', classifier: 'tests'
+
+    // Add the classpath file to the test runtime classpath
+    //testRuntime files(createClasspathManifest)
 }
+
+test.dependsOn(['createClasspathManifest'])
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'

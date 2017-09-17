@@ -4,6 +4,7 @@
     <output-test url="file://$MODULE_DIR$/../../../cloud-generators-gradle/out/test/classes" />
     <exclude-output />
     <content url="file://$MODULE_DIR$/../../../cloud-generators-gradle/src/test">
+      <sourceFolder url="file://$MODULE_DIR$/../../../cloud-generators-gradle/src/test/groovy" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/../../../cloud-generators-gradle/src/test/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/../../../cloud-generators-gradle/src/test/resources" type="java-test-resource" />
     </content>
@@ -30,6 +31,15 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
+          <root url="jar://$USER_HOME$/.gradle/wrapper/dists/gradle-3.5-rc-2-bin/7ktl4k9rdug30mawecgppf5ms/gradle-3.5-rc-2/lib/gradle-installation-beacon-3.5.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
           <root url="jar://$USER_HOME$/.gradle/wrapper/dists/gradle-3.5-rc-2-bin/7ktl4k9rdug30mawecgppf5ms/gradle-3.5-rc-2/lib/groovy-all-2.4.10.jar!/" />
         </CLASSES>
         <JAVADOC />
@@ -37,15 +47,6 @@
       </library>
     </orderEntry>
     <orderEntry type="module" module-name="cloud-generators-gradle_main" />
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$USER_HOME$/.gradle/wrapper/dists/gradle-3.5-rc-2-bin/7ktl4k9rdug30mawecgppf5ms/gradle-3.5-rc-2/lib/gradle-installation-beacon-3.5.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
     <orderEntry type="module-library" scope="RUNTIME">
       <library>
         <CLASSES>
@@ -56,6 +57,7 @@
       </library>
     </orderEntry>
     <orderEntry type="module" module-name="cloud-generator-core_main" />
+    <orderEntry type="library" name="Gradle: org.spockframework:spock-core:1.0-groovy-2.4" level="project" />
     <orderEntry type="library" name="Gradle: junit:junit:4.12" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.httpcomponents:httpclient:tests:4.5.3" level="project" />
     <orderEntry type="library" name="Gradle: com.kenticocloud:delivery-sdk-java:1.0" level="project" />
