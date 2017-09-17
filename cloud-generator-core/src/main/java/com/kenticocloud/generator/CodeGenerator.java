@@ -36,18 +36,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Generates java source files using the Kentico Cloud Type listing endpoint in the Delivery API
+ */
 public class CodeGenerator {
 
     private static final String DELIVERY_PACKAGE = "com.kenticocloud.delivery";
     private static final String JAVA_UTIL_PACKAGE = "java.util";
 
     String projectId;
-    String classpath;
+    String packageName;
     File outputDir;
 
-    public CodeGenerator(String projectId, String classpath, File outputDir) {
+    /**
+     * Constructs the CodeGenerator
+     * @param projectId the project id from your Kentico Cloud account
+     * @param packageName the package to place the generated models under
+     * @param outputDir the source root to place the generated models
+     * @throws UnsupportedOperationException when a there is a problem with the outputDir
+     */
+    public CodeGenerator(String projectId, String packageName, File outputDir) {
         this.projectId = projectId;
-        this.classpath = classpath;
+        this.packageName = packageName;
         this.outputDir = outputDir;
         if (!outputDir.exists() && !outputDir.mkdirs()){
             throw new UnsupportedOperationException(
@@ -59,14 +69,34 @@ public class CodeGenerator {
         }
     }
 
+    /**
+     * Returns a list of specifications of the sources representing the types in your Kentico Cloud account
+     * @return A list of specifications
+     * @throws IOException when a problem occurs communicating with the Kentico Cloud API
+     */
     public List<JavaFile> generateSources() throws IOException {
         return generateSources(new DeliveryClient(projectId));
     }
 
+    /**
+     * Returns a list of specifications of the sources representing the types in your Kentico Cloud account.
+     * The provided {@link DeliveryClient} param is useful for testing, however in most environments, the default
+     * {@link #generateSources()} method should suffice.
+     * @param client A DeliveryClient instance to use to generate the sources.
+     * @return A list of specifications
+     * @throws IOException when a problem occurs communicating with the Kentico Cloud API
+     */
     public List<JavaFile> generateSources(DeliveryClient client) throws IOException {
         return generateSources(client.getTypes().getTypes());
     }
 
+    /**
+     * Returns a list of specifications of the sources representing the types in your Kentico Cloud account.
+     * The provided List of {@link ContentType} param is useful for testing, however in most environments, the default
+     * {@link #generateSources()} method should generally be the only method invoking this.
+     * @param types A List of ContentType to generate the sources from
+     * @return A list of specifications
+     */
     public List<JavaFile> generateSources(List<ContentType> types) {
         List<JavaFile> sources = new ArrayList<>();
         for (ContentType type : types) {
@@ -75,6 +105,13 @@ public class CodeGenerator {
         return sources;
     }
 
+    /**
+     * Returns a specification of the source representing this type in your Kentico Cloud account.
+     * Invoking this directly may be useful for testing, however in most environments, the default
+     * {@link #generateSources()} method should suffice.
+     * @param type A ContentType to generate the source from
+     * @return A specification
+     */
     public JavaFile generateSource(ContentType type) {
 
         List<FieldSpec> fieldSpecs = new ArrayList<>();
@@ -175,15 +212,30 @@ public class CodeGenerator {
 
         TypeSpec typeSpec = typeSpecBuilder.build();
 
-        return JavaFile.builder(classpath, typeSpec).build();
+        return JavaFile.builder(packageName, typeSpec).build();
     }
 
+    /**
+     * Writes the provided specifications to the outputDir provided in the constructor.  This is generally called
+     * after a call to {@link #generateSources()}, but is separated in case you need to make modifications to your
+     * specifications before writing.
+     * @param sources A list of specifications
+     * @throws IOException when a problem occurs writing the source files, note some source may have been written when
+     * this is thrown
+     */
     public void writeSources(List<JavaFile> sources) throws IOException {
         for (JavaFile source : sources) {
             writeSource(source);
         }
     }
 
+    /**
+     * Writes the provided specification to the outputDir provided in the constructor.  This is generally called
+     * after a call to {@link #generateSources()}, but is separated in case you need to make modifications to your
+     * specification before writing.
+     * @param source A specification
+     * @throws IOException when a problem occurs writing the source files
+     */
     public void writeSource(JavaFile source) throws IOException {
         source.writeTo(outputDir);
     }

@@ -2,6 +2,12 @@ language: java
 
 install: true
 
+env:
+  global:
+  - secure: "qsF/wfvAOPVC2ooQS+7HdyxJEivtbUwcrm5Mu7/C/UhFrLnqlLWwPq9AnDoreLgzUfrkq2afQlYG/2KoFxPjDu6VLomYlbkLqTr+nIpOyHxmXUP42b/C2YjV4drHmOZoPuF2lhl4+BE25J91/mzf+7YsoizpJgKBR6s/WTO5uryfEd1iNgUfs2eZ9eQvuo/AL0lO7+lkf73x0NEo26FpmEECpQPxD49GX6XivvZ1WpI3v8LXbT/wtl1dBaLDNgXXriaHp65UiWUyoTRcv5Twjn3uu3X5qKe3UkVDA6lNS8Ex4AWpuu7bOGUIVr4KR7q2b5bBZQLgcpXhVIEFDdWymt2oCaxz8Yz3YwnqCNeL0dbQ0Ktx9l5RA1G83bsl5SxiGauMcuU1phdnhQR96lvFXEXMtKoQ232aKNDotpIuYxHJ27W1a4rwvfxP842OI5UDZwoCM9Pwp6s/tx9Ffw5368R1kzbqlUajXQjNKR8YNjXQ+F8D4NMpo41O9+0iIZev62MK8OjyMN0sPV/fa2uLHdBJ7Zz6S1a6PVRMUF8u+ivWqp0uU+UONbHKmutC7Dfzoi9UigPdiXrdaZWzUPkTB4+NH9JP1XsJqrQfUeEweZIXEciux85sMuOE9d1Le6Tn3uV9wePM3PMNivgZop6jPlFIvH/ijvCiNXS0cKzjmQE="
+  - secure: "IqadHay7bwJUBwgYjVSnHFjCCbWmEQXlFH4rpVLrmnzReXxXqNS/5ouHXG0yxdengXfGMVaypzqb+FaFYal3nuYGZsKOdCo6OA+PyiIKyh/ok60uYw4LnTNEfo7kwt0GqUWQsJNO5Flkxrq6TMDggw8c2396POsPOCN4BmAh/seUaoL1cgkRXwuaemJHRNeBHJ8tD6PbA4hesmYqAkUk0qieI+cz2iWLpHRwPT5hg3zFpShUqvLMxygPqpQiMHL3DxfYkbmM+PtbL0BIpeQDBHMEjUszioZejJIQBhk+0hvNxHgESyNpuAIdVR6TrSC1XbAuGn3BTrI1pwvQ5FLjRVNpZcz1nBxRSGpLDj/gqUa76GJ5FaotrfQwPjJFy+hPJAT76pBrS1ExMrZ/xWjvm1cVY5LbDIiw6ZeeHC0xVHLDVQ/ll8eDeGQ96gJnCUzynLxT8b6K9Qi5on3BPeH6VgjUXudDDibXx/ZE5RDue7I/8fi7DMNjmZaF5FzoVt/0/36v2pKoia56HwpoNr97ilj7K9yJEDTxV8gd7oUO58BH8kF6X4+ndq5vqFAwgIe1SUrLPStqHidkIJ7WiEccJ7abitCqBfgvk5SZh0A51Ccb+AM6QwSq3Z+T/tD5AkS8PxGavfsz88VoloPYG+aUb6y9vFGMJG0iCUyM6a0WOvA="
+  - secure: "QIm0NlaJPVWxyOIhBC6fKpC55Lz+UeFOTj2toIwUPoBGeIdmWR7k0p3HqIzT75YiKVjOcqfbeNJst5BzEIyzDLexjAwvSB+MXP0MX9U6AUmJXa5LW/JJ/JGXEJsZ+0UpLyNq0oFwT75/eQhs2azvAC0jtuJx2iI5ZyDcLj00phluG2sByuASCX2UIZ0YOF/FidS6eh1Q5Y2vgUa0sV/h4qYPKuWCHodux3nvbTPVm8QCqixIUkeSMXLad1cj+Wss3J0dtRB98NbjISUNpO3/RH84leyAw9+i4uT/vfHNVVxEcRsNdp1QiSoF6gE4sraSNodhTO/LAfCD26eaeE03IQildX4M1ocARAkge1/PURRIY6/VsfT07auJyLGeWic5P2xwI7K26mP40uK99RPTKa/LDe16LBPOKWvHwMcH8ZE7dLrvs8zaL+ARFiO7sJnhdXz3+f6LKq6owXFNa5Tqq0c3vOs+dkBYV/foRRiXjhLZhJvKauV6fX7QYyD0+A3u319/ROJuhBrjN1XPtIkBq/k7kWeMT4rEd1YCl/dOiNtb3qVB8pJSN/AeItkClIx8Nh2yXcRjqxU5qzZev0t4zTSA26tILGzVctu9MYwzpiqBhLLtzMN5blIL9S3zH2NzttIYEhQx+pQA5YtrkOxFJ6NglicXdoUpIbR1D56xrBM="
+
 addons:
   sonarcloud:
     organization: "kentico-github"
@@ -10,6 +16,7 @@ addons:
 
 script:
   - ./gradlew sonarqube
+  - ".travis/upload_nexus.sh"
 
 before_cache:
   # remove all the artifacts (JAR, ZIP) that are installed in local repo because of gradle deploy
@@ -21,3 +28,8 @@ cache:
   - $HOME/.sonar/cache
   - $HOME/.gradle/caches/
   - $HOME/.gradle/wrapper
+
+before_install:
+  - openssl aes-256-cbc -K $encrypted_8053689876a3_key -iv $encrypted_8053689876a3_iv -in secrets.tar.enc -out secrets.tar -d
+  - tar xvf secrets.tar
+

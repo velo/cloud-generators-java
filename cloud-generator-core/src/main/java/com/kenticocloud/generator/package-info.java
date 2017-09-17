@@ -22,13 +22,13 @@
  * SOFTWARE.
  */
 
-package com.kenticocloud.generator.gradle
-
-import com.kenticocloud.delivery.DeliveryClient
-
-class GenerateModelsExtension {
-    String projectId
-    String packageName
-    File outputDir
-    DeliveryClient deliveryClient
-}
+/**
+ * Kentico Cloud model generator utility for Java
+ * <p>
+ * This utility generates strongly-typed models based on Content Types in a Kentico Cloud project. The models are
+ * supposed to be used together with the
+ * <a href="https://github.com/Kentico/delivery-sdk-java">Kentico Cloud Delivery SDK for Java</a>. Please read the
+ * <a href="https://github.com/Kentico/delivery-sdk-java/wiki/Working-with-Strongly-Typed-Models-(aka-Code-First-Approach)#customizing-the-strong-type-binding-logic">documentation</a> to see all benefits of this approach.
+ * </p>
+ */
+package com.kenticocloud.generator;

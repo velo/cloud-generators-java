@@ -101,7 +101,7 @@ class GenerateModelsFuncTest extends Specification {
         buildFile << '''
             kenticoModel {
                 projectId = '02a70003-e864-464e-b62c-e0ede97deb8c'
-                classpath = 'com.dancinggoat.models'
+                packageName = 'com.dancinggoat.models'
                 outputDir = file('generated-sources')
                 deliveryClient = client
             }

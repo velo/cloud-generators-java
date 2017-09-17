@@ -40,10 +40,10 @@ class GenerateModels extends DefaultTask {
     @TaskAction
     void perform() throws IOException {
         String projectId = project.kenticoModel.projectId
-        String classpath = project.kenticoModel.classpath
+        String packageName = project.kenticoModel.packageName
         File outputDir = project.kenticoModel.outputDir
         DeliveryClient deliveryClient = project.kenticoModel.deliveryClient
-        CodeGenerator codeGenerator = new CodeGenerator(projectId, classpath, outputDir)
+        CodeGenerator codeGenerator = new CodeGenerator(projectId, packageName, outputDir)
         List<JavaFile> sources =
                 deliveryClient == null ? codeGenerator.generateSources() : codeGenerator.generateSources(deliveryClient)
         codeGenerator.writeSources(sources)
