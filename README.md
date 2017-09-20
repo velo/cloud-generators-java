@@ -80,6 +80,7 @@ import com.kenticocloud.delivery.Asset;
 import com.kenticocloud.delivery.ContentItem;
 import com.kenticocloud.delivery.ContentItemMapping;
 import com.kenticocloud.delivery.ElementMapping;
+import com.kenticocloud.delivery.System;
 import com.kenticocloud.delivery.Taxonomy;
 import java.lang.String;
 import java.time.ZonedDateTime;
@@ -112,13 +113,15 @@ public class Article {
   String bodyCopy;
 
   @ElementMapping("related_articles")
-  ContentItem relatedArticles;
+  List<ContentItem> relatedArticles;
 
   @ElementMapping("meta_keywords")
   String metaKeywords;
 
   @ElementMapping("meta_description")
   String metaDescription;
+  
+  System system;
 
   public List<Taxonomy> getPersonas() {
     return personas;
@@ -168,11 +171,11 @@ public class Article {
     this.bodyCopy = bodyCopy;
   }
 
-  public ContentItem getRelatedArticles() {
+  public List<ContentItem> getRelatedArticles() {
     return relatedArticles;
   }
 
-  public void setRelatedArticles(ContentItem relatedArticles) {
+  public void setRelatedArticles(List<ContentItem> relatedArticles) {
     this.relatedArticles = relatedArticles;
   }
 
@@ -190,6 +193,14 @@ public class Article {
 
   public void setMetaDescription(String metaDescription) {
     this.metaDescription = metaDescription;
+  }
+  
+  public System getSystem() {
+    return system;
+  }
+  
+  public void setSystem(System system) {
+    this.system = system;
   }
 }
 ```
