@@ -25,12 +25,17 @@ buildscript {
 	}
 }
 
+apply plugin: 'java'
 apply plugin: 'com.kenticocloud.generator'
 
 kenticoModel {
 	projectId = '975bf280-fd91-488c-994c-2f04416e5ee3'
 	packageName = 'com.dancinggoat.models'
 	outputDir = file('generated-sources')
+}
+
+dependencies {
+    compile('com.kenticocloud:delivery-sdk-java:1.0.1')
 }
 ```
 
