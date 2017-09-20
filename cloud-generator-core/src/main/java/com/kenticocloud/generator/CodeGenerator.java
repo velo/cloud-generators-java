@@ -26,6 +26,7 @@ package com.kenticocloud.generator;
 
 import com.google.common.base.CaseFormat;
 import com.kenticocloud.delivery.*;
+import com.kenticocloud.delivery.System;
 import com.squareup.javapoet.*;
 
 import javax.lang.model.element.Modifier;
@@ -43,6 +44,7 @@ public class CodeGenerator {
 
     private static final String DELIVERY_PACKAGE = "com.kenticocloud.delivery";
     private static final String JAVA_UTIL_PACKAGE = "java.util";
+    private static final String SYSTEM = "system";
 
     String projectId;
     String packageName;
@@ -143,9 +145,9 @@ public class CodeGenerator {
                             ClassName.get(DELIVERY_PACKAGE, "Asset"));
                     break;
                 case "modular_content" :
-                    //It would be nice to inject a generated model here, but the information is not in the API
-                    //consumer could always use .castTo() off the ContentItem
-                    typeName = ClassName.get(ContentItem.class);
+                    typeName = ParameterizedTypeName.get(
+                            ClassName.get(JAVA_UTIL_PACKAGE, "List"),
+                            ClassName.get(DELIVERY_PACKAGE, "ContentItem"));
                     break;
                 case "taxonomy" :
                     typeName = ParameterizedTypeName.get(
@@ -186,6 +188,23 @@ public class CodeGenerator {
                 );
             }
         }
+
+        //Add the System element
+        fieldSpecs.add(FieldSpec.builder(ClassName.get(System.class), SYSTEM).build());
+        methodSpecs.add(
+                MethodSpec.methodBuilder("getSystem")
+                        .addModifiers(Modifier.PUBLIC)
+                        .returns(ClassName.get(System.class))
+                        .addStatement("return $N", SYSTEM)
+                        .build()
+        );
+        methodSpecs.add(
+                MethodSpec.methodBuilder("setSystem")
+                        .addModifiers(Modifier.PUBLIC)
+                        .addParameter(ClassName.get(System.class), SYSTEM)
+                        .addStatement("this.$N = $N", SYSTEM, SYSTEM)
+                        .build()
+        );
 
         //Create the class
         TypeSpec.Builder typeSpecBuilder = TypeSpec

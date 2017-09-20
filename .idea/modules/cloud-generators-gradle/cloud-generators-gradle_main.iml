@@ -116,7 +116,7 @@
       </library>
     </orderEntry>
     <orderEntry type="module" module-name="cloud-generator-core_main" />
-    <orderEntry type="library" name="Gradle: com.kenticocloud:delivery-sdk-java:1.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.kenticocloud:delivery-sdk-java:1.0.1" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup:javapoet:1.9.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.guava:guava:23.0" level="project" />
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-core:2.8.9" level="project" />
@@ -133,7 +133,6 @@
     <orderEntry type="library" name="Gradle: org.apache.httpcomponents:httpcore:4.4.6" level="project" />
     <orderEntry type="library" name="Gradle: commons-logging:commons-logging:1.2" level="project" />
     <orderEntry type="library" name="Gradle: commons-codec:commons-codec:1.9" level="project" />
-    <orderEntry type="library" name="Gradle: commons-collections:commons-collections:3.2.2" level="project" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>
@@ -143,5 +142,6 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="Gradle: commons-collections:commons-collections:3.2.2" level="project" />
   </component>
 </module>
