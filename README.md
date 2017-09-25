@@ -13,6 +13,14 @@ This utility generates strongly-typed models based on Content Types in a Kentico
 Apply the gradle plugin to your build file.
 
 ```groovy
+plugins {
+  id "com.kenticocloud.generator" version "1.0"
+}
+```
+
+If you are not on Gradle 2.1 or later, apply it via Maven central.
+
+```groovy
 buildscript {
 	repositories {
 		mavenCentral()
@@ -22,8 +30,13 @@ buildscript {
 	}
 }
 
-apply plugin: 'java'
 apply plugin: 'com.kenticocloud.generator'
+```
+
+Configure the plugin.
+
+```groovy
+apply plugin: 'java'
 
 kenticoModel {
 	projectId = '975bf280-fd91-488c-994c-2f04416e5ee3'
