@@ -107,7 +107,7 @@ class GenerateModelsFuncTest extends Specification {
             }
             
             dependencies {
-                compile group: 'com.kenticocloud', name: 'delivery-sdk-java', version: '1.0'
+                compile group: 'com.kenticocloud', name: 'delivery-sdk-java', version: '1.0.2'
                 testCompile group: 'junit', name: 'junit', version: '4.12'
             }
         '''

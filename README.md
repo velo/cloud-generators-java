@@ -16,10 +16,9 @@ Apply the gradle plugin to your build file.
 buildscript {
 	repositories {
 		mavenCentral()
-		maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
 	}
 	dependencies {
-		classpath("com.kenticocloud:cloud-generators-gradle:1.0-SNAPSHOT")
+		classpath("com.kenticocloud:cloud-generators-gradle:1.0")
 	}
 }
 
@@ -33,7 +32,7 @@ kenticoModel {
 }
 
 dependencies {
-    compile('com.kenticocloud:delivery-sdk-java:1.0.1')
+    compile('com.kenticocloud:delivery-sdk-java:1.0.2')
 }
 ```
 
