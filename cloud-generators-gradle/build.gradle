@@ -26,10 +26,11 @@ plugins {
     id 'java-gradle-plugin'
     id "org.sonarqube" version "2.2"
     id "com.gorylenko.gradle-git-properties" version "1.4.17"
+    id 'com.gradle.plugin-publish' version '0.9.7'
 }
 
 group 'com.kenticocloud'
-version '1.0-SNAPSHOT'
+version '1.0'
 ext.isContinuousIntegrationBuild = System.getenv('CONTINUOUS_INTEGRATION') != null
 
 apply plugin: 'java'
@@ -92,8 +93,22 @@ artifacts {
     archives sourcesJar
 }
 
+pluginBundle {
+    website     = 'https://kenticocloud.com/'
+    vcsUrl      = 'https://github.com/Kentico/cloud-generators-java.git'
+
+    plugins {
+        gradletestPlugin {
+            id = 'com.kenticocloud.generator'
+            displayName = 'Kentico Cloud Generators'
+            description = 'Java code generators for Kentico Cloud. https://kenticocloud.com/'
+            tags = ['generator','templates','kentico-cloud','java']
+        }
+    }
+}
+
 signing {
-    required { isContinuousIntegrationBuild && gradle.taskGraph.hasTask("uploadArchives") }
+    required { (isContinuousIntegrationBuild && gradle.taskGraph.hasTask("uploadArchives")) || gradle.taskGraph.hasTask("publishPlugins") }
     sign configurations.archives
 }
 
