@@ -45,7 +45,7 @@ kenticoModel {
 }
 
 dependencies {
-    compile('com.kenticocloud:delivery-sdk-java:1.0.2')
+    compile('com.kenticocloud:delivery-sdk-java:1.0.3')
 }
 ```
 
