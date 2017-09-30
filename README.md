@@ -122,7 +122,7 @@ public class Article {
   @ElementMapping("body_copy")
   String bodyCopy;
 
-  @ElementMapping("related_articles")
+  @ContentItemMapping("related_articles")
   List<ContentItem> relatedArticles;
 
   @ElementMapping("meta_keywords")
