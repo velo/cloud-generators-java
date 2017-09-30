@@ -14,7 +14,7 @@ Apply the gradle plugin to your build file.
 
 ```groovy
 plugins {
-  id "com.kenticocloud.generator" version "1.0"
+  id "com.kenticocloud.generator" version "1.1"
 }
 ```
 
@@ -26,7 +26,7 @@ buildscript {
 		mavenCentral()
 	}
 	dependencies {
-		classpath("com.kenticocloud:cloud-generators-gradle:1.0")
+		classpath("com.kenticocloud:cloud-generators-gradle:1.1")
 	}
 }
 
