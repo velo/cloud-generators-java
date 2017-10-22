@@ -1,0 +1,131 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2017
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+plugins {
+    id "org.sonarqube" version "2.2"
+    id "com.gorylenko.gradle-git-properties" version "1.4.17"
+}
+
+group 'com.kenticocloud'
+version '1.0'
+ext.isContinuousIntegrationBuild = System.getenv('CONTINUOUS_INTEGRATION') != null
+
+apply plugin: 'java'
+apply plugin: 'jacoco'
+apply plugin: 'maven'
+apply plugin: 'signing'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    all*.exclude group: 'org.codehaus.groovy', module: 'groovy-all'
+}
+
+dependencies {
+    compile project(':cloud-generator-core')
+    compile 'org.apache.maven:maven-plugin-api:3.0.5'
+    compile 'org.apache.maven.plugin-tools:maven-plugin-annotations:3.5'
+    compile 'org.apache.maven:maven-core:3.0.5'
+}
+
+test.dependsOn(['createClasspathManifest'])
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from 'build/docs/javadoc'
+}
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+artifacts {
+    archives jar
+    archives javadocJar
+    archives sourcesJar
+}
+
+signing {
+    required { (isContinuousIntegrationBuild && gradle.taskGraph.hasTask("uploadArchives")) || gradle.taskGraph.hasTask("publishPlugins") }
+    sign configurations.archives
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            //Comment out this step if you do not have the signing key
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: nexusUsername, password: nexusPassword)
+            }
+
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: nexusUsername, password: nexusPassword)
+            }
+
+            //Use this repository, and comment out the above for viewing the generated POM
+            //repository(url: "file://localhost/tmp/myRepo/")
+
+            pom.project {
+                name 'cloud-generators-gradle'
+                packaging 'jar'
+                description 'Kentico Cloud Delivery Java Code Generator Core https://kenticocloud.com/'
+                url 'https://github.com/Kentico/cloud-generators-java'
+
+                scm {
+                    url 'https://github.com/Kentico/cloud-generators-java'
+                    connection 'scm:https://github.com/Kentico/cloud-generators-java.git'
+                    developerConnection 'scm:git://github.com/Kentico/cloud-generators-java.git'
+                }
+
+                licenses {
+                    license {
+                        name 'MIT License'
+                        url 'http://www.opensource.org/licenses/mit-license.php'
+                        distribution 'repo'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'aweigold'
+                        name 'Adam J. Weigold'
+                        email 'adam@adamweigold.com'
+                    }
+                    developer {
+                        id 'velo'
+                        name 'Marvin Herman Froeder'
+                        email 'velo dot br at gmail dot com'
+                    }
+                }
+            }
+        }
+    }
+}

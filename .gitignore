@@ -43,3 +43,12 @@ hs_err_pid*
 .idea/dataSources/
 .idea/dictionaries/*
 .idea/shelf/
+
+### Eclipse m2e ###
+.project
+.classpath
+.settings/
+bin/
+build/
+target/
+
